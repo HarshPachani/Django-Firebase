@@ -1,6 +1,7 @@
 #This file is created by Harsh Pachani.
 from django.shortcuts import render
 import pyrebase
+from django.contrib import auth
 
 config = {
   'apiKey': "AIzaSyDfz4LXyaMzkjkS3JJHvAHbPsZpH7ymy6k",
@@ -13,7 +14,7 @@ config = {
 }
 
 firebase = pyrebase.initialize_app(config)
-auth = firebase.auth()
+authentication = firebase.auth()
 
 #This is a view
 def signIn(request):
@@ -23,6 +24,18 @@ def postSign(request):
     email = request.POST.get('email')
     password = request.POST.get('password')
 
-    user = auth.sign_in_with_email_and_password(email, password)
+    try:
+        user = authentication.sign_in_with_email_and_password(email, password)
+    except:
+        message = "Invalid Credentials"
+        return render(request, 'signIn.html', {"message": message})
+    
+    print("\t\t\t\t", user['idToken'])
+    session_id = user['idToken']
+    request.session['uid'] = str(session_id)
 
     return render(request, 'welcome.html', {"e":email})
+
+def logout(request):
+    auth.logout(request)
+    return render(request, 'signIn.html')

@@ -15,6 +15,8 @@ config = {
 
 firebase = pyrebase.initialize_app(config)
 authentication = firebase.auth()
+database = firebase.database()
+
 
 #This is a view
 def signIn(request):
@@ -38,4 +40,22 @@ def postSign(request):
 
 def logout(request):
     auth.logout(request)
+    return render(request, 'signIn.html')
+
+def signUp(request):
+    return render(request, 'signUp.html')
+
+def postSignUp(request):
+    name = request.POST.get('name')
+    email = request.POST.get('email')
+    password = request.POST.get('password')
+
+    try:
+        user = authentication.create_user_with_email_and_password(email, password)
+    except:
+        message = "unable to create account, Try again"
+        return render(request, 'signIn.html', {"message": message})
+        uId = user['localId']
+    data = {"name": name, "status": "1"}
+    database.child("users").child(uId).child("details").set(data)
     return render(request, 'signIn.html')

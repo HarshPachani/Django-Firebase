@@ -6,6 +6,7 @@ from django.contrib import auth
 config = {
   'apiKey': "AIzaSyDfz4LXyaMzkjkS3JJHvAHbPsZpH7ymy6k",
   'authDomain': "cpanel-aaec2.firebaseapp.com",
+  'databaseURL':"https://cpanel-aaec2-default-rtdb.firebaseio.com/",
   'projectId': "cpanel-aaec2",
   'storageBucket': "cpanel-aaec2.appspot.com",
   'messagingSenderId': "690093862161",
@@ -52,10 +53,10 @@ def postSignUp(request):
 
     try:
         user = authentication.create_user_with_email_and_password(email, password)
-    except:
-        message = "unable to create account, Try again"
+    except Exception as ex:
+        message = f"unable to create account, Try again, :{ex}"
         return render(request, 'signIn.html', {"message": message})
-        uId = user['localId']
+    uId = user['localId']
     data = {"name": name, "status": "1"}
     database.child("users").child(uId).child("details").set(data)
     return render(request, 'signIn.html')

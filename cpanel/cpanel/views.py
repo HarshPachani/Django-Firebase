@@ -54,7 +54,7 @@ def postSignUp(request):
     try:
         user = authentication.create_user_with_email_and_password(email, password)
     except Exception as ex:
-        message = f"unable to create account, Try again, :{ex}"
+        message = "unable to create account, Try again"
         return render(request, 'signIn.html', {"message": message})
     uId = user['localId']
     data = {"name": name, "status": "1"}

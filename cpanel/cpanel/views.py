@@ -60,3 +60,32 @@ def postSignUp(request):
     data = {"name": name, "status": "1"}
     database.child("users").child(uId).child("details").set(data)
     return render(request, 'signIn.html')
+
+def create(request):
+    return render(request, 'create.html')
+
+def post_create(request):
+    import time
+    from datetime import datetime, timezone
+    import pytz
+
+    tz = pytz.timezone('Asia/Kolkata')
+    time_now = datetime.now(timezone.utc).astimezone(tz)
+    millis = int(time.mktime(time_now.timetuple()))
+    print("\t\t\t\t Mili: ", str(millis))
+
+    work = request.POST.get('work')
+    progress = request.POST.get('progress')
+
+    idtoken = request.session['uid']
+    a = authentication.get_account_info(idtoken)
+    a = a['users']
+    a = a[0]
+    a = a['localId']
+    
+    print("\t\t\t\tInfo: ", str(a))
+    data = {
+        "work": work,
+        "progress": progress
+    }
+    return render(request, 'welcome.html')

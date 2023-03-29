@@ -22,5 +22,7 @@ urlpatterns = [
     path('postSign', views.postSign),   
     path('logout', views.logout, name = "logout"),
     path('signUp', views.signUp, name = "signUp"),
-    path('postSignUp', views.postSignUp, name = "postSignUp")
+    path('postSignUp', views.postSignUp, name = "postSignUp"),
+    path('create', views.create, name = "create"),
+    path('post_create', views.post_create, name = "post_create")
 ]

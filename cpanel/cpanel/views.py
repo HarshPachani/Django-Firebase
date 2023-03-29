@@ -69,7 +69,7 @@ def post_create(request):
     from datetime import datetime, timezone
     import pytz
 
-    tz = pytz.timezone('Asia/Kolkata')
+    tz = pytz.timezone('Asia/kolkata')
     time_now = datetime.now(timezone.utc).astimezone(tz)
     millis = int(time.mktime(time_now.timetuple()))
     print("\t\t\t\t Mili: ", str(millis))
@@ -82,10 +82,14 @@ def post_create(request):
     a = a['users']
     a = a[0]
     a = a['localId']
-    
+
     print("\t\t\t\tInfo: ", str(a))
     data = {
         "work": work,
         "progress": progress
     }
-    return render(request, 'welcome.html')
+
+
+    database.child("users").child(a).child("reports").child(millis).set(data)
+    name = database.child("users").child(a).child("details").child("name").get().val()
+    return render(request, 'welcome.html', {"e": name})

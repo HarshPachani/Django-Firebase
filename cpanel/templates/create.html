@@ -18,10 +18,10 @@
     <form action="post_create" method = "post">
         {% csrf_token %}
         Work Assigned :
-        <input type="text" name = "work">
+        <input type="text" name = "work" required>
         <br><br>
         progress :
-        <textarea rows = "5" cols = "40" name = "progress"></textarea><br><br>
+        <textarea rows = "5" cols = "40" name = "progress" required></textarea><br><br>
         <input type="submit" value="submit">
 
         <div>

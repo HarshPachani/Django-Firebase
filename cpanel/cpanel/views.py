@@ -58,7 +58,8 @@ def postSignUp(request):
         return render(request, 'signIn.html', {"message": message})
     uId = user['localId']
     data = {"name": name, "status": "1"}
-    database.child("users").child(uId).child("details").set(data)
+    d = database.child("users").child(uId).child("details").set(data)
+    print("\t\t\t\tData: ", d)
     return render(request, 'signIn.html')
 
 def create(request):

@@ -33,7 +33,8 @@ def postSign(request):
         message = "Invalid Credentials"
         return render(request, 'signIn.html', {"message": message})
     
-    print("\t\t\t\t", user['idToken'])
+    print("\t\t\t\tUser: ", user)
+    print("\t\t\t\tUser idToken: ", user['idToken'])
     session_id = user['idToken']
     request.session['uid'] = str(session_id)
 

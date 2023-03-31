@@ -19,9 +19,11 @@ db = firebase.database()
 data = {
     "Name": "Harsh", "Age": 20, "Address": ["Ahmedabad", "Junagadh", "Gandhinagar"]
 }
+# print(db.push(data)) #unique key is generated
+db.child("Branch").child("Employee").child("Male employee").push(data)
 
-print(db.push(data)) #unique key is generated
-
-#To Change the Data.
-# Using set() overwrites data at the specified location, including any child nodes.
-# print(db.set(data)) #unique key is generated
+#Create Your own key with set() method.
+# data = {
+#     "Age": 20, "Address": "[Gujarat]"
+# }
+# db.child("Harsh").set(data)

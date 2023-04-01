@@ -12,7 +12,7 @@ firebaseConfig = {
 
 firebase = pyrebase.initialize_app(firebaseConfig)
 
-database = firebase.database()
+db = firebase.database()
 storage = firebase.storage()
 
 name = input("Enter Name: ")
@@ -21,3 +21,8 @@ profession = input("Enter Profession: ")
 
 filename = input("Enter the name of file you want to upload to storage: ")
 cloudfilename = input("Enter the name of the file in cloud: ")
+
+storage.child(cloudfilename).put(filename)
+url = storage.child(cloudfilename).get_url(None)
+data = {"Name": name, "Age": age, "Profession": profession, "url": url}
+db.child("users").push(data)

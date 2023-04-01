@@ -54,7 +54,7 @@ users = db.child("RetrieveData").child("users").get()
 #Iterate over keys
 print("\n\t\t\tIterate Over the keys")
 for user in users.each():
-    print("key: ", user.val())
+    print("key: ", user.key())
     print("Values: ", user.val())
     print()
 

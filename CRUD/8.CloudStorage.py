@@ -3,6 +3,7 @@ import pyrebase
 firebaseConfig = {
     "apiKey": "AIzaSyDmmJcWxCFnAzgBdDcNTJSCRlWvGIU6414",
     "authDomain": "realtimedbstoragedemo-2c0fb.firebaseapp.com",
+    "databaseURL": "https://realtimedbstoragedemo-2c0fb-default-rtdb.firebaseio.com",
     "projectId": "realtimedbstoragedemo-2c0fb",
     "storageBucket": "realtimedbstoragedemo-2c0fb.appspot.com",
     "messagingSenderId": "704263168946",

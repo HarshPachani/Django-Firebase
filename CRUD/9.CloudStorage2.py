@@ -1,4 +1,5 @@
 import pyrebase
+import urllib #It is a standard way to read file from the internet.
 
 firebaseConfig = {
     "apiKey": "AIzaSyDmmJcWxCFnAzgBdDcNTJSCRlWvGIU6414",
@@ -27,3 +28,12 @@ storage = firebase.storage()
 # url = storage.child(cloudfilename).get_url(None)
 # data = {"Name": name, "Age": age, "Profession": profession, "url": url}
 # db.child("users").push(data)
+
+
+results = db.child("users").order_by_child("Name").equal_to("Harsh").get()
+for result in results.each():
+    # print(result.val()["url"])
+    url = result.val()["url"]
+    # print(result.key())
+    f = urllib.request.urlopen(url).read() 
+    print(f)

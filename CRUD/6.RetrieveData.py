@@ -42,7 +42,8 @@ db.child("RetrieveData").child("users").push(data2)
 db.child("RetrieveData").child("users").push(data3)
 db.child("RetrieveData").child("users").push(data4)
 """
-
+data5 = {"address": "paris", "age": 44, "firstname": "George"}
+db.child("RetrieveData").child("users").push(data5)
 #Retrieve Data
 users = db.child("RetrieveData").child("users").get()
 # print(users.val())

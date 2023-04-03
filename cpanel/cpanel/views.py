@@ -40,7 +40,11 @@ def postSign(request):
     return render(request, 'welcome.html', {"e":email})
 
 def logout(request):
-    auth.logout(request)
+    # auth.logout(request)
+    try:
+        del request.session['uId']
+    except KeyError:
+        pass
     return render(request, 'signIn.html')
 
 def signUp(request):
@@ -58,7 +62,8 @@ def postSignUp(request):
         return render(request, 'signIn.html', {"message": message})
     uId = user['localId']
     data = {"name": name, "status": "1"}
-    d = database.child("users").child(uId).child("details").set(data)
+    idtoken = request.session['uid']
+    d = database.child("users").child(uId).child("details").set(data, idtoken)
     print("\t\t\t\tData: ", d)
     return render(request, 'signIn.html')
 
@@ -70,27 +75,47 @@ def post_create(request):
     from datetime import datetime, timezone
     import pytz
 
-    tz = pytz.timezone('Asia/kolkata')
-    time_now = datetime.now(timezone.utc).astimezone(tz)
-    millis = int(time.mktime(time_now.timetuple()))
-    print("\t\t\t\t Mili: ", str(millis))
+    """
+        Note:When do you authenticate the user with the help of session then you have to change the rules of your firebase database
+        Changes Rules:
+        {
+            "rules": {
+                "users": {
+                    "$uid": {
+                        ".read": "$uid === auth.uid",
+                        ".write": "$uid === auth.uid"
+                    }
+                }
+            }    
+                //These rules fetch the email id
+        }
+    """
 
-    work = request.POST.get('work')
-    progress = request.POST.get('progress')
+    try:
+        tz = pytz.timezone('Asia/kolkata')
+        time_now = datetime.now(timezone.utc).astimezone(tz)
+        millis = int(time.mktime(time_now.timetuple()))
+        print("\t\t\t\t Mili: ", str(millis))
 
-    idtoken = request.session['uid']
-    a = authentication.get_account_info(idtoken)
-    a = a['users']
-    a = a[0]
-    a = a['localId']
+        work = request.POST.get('work')
+        progress = request.POST.get('progress')
 
-    print("\t\t\t\tInfo: ", str(a))
-    data = {
-        "work": work,
-        "progress": progress
-    }
+        idtoken = request.session['uid']
+        a = authentication.get_account_info(idtoken)
+        a = a['users']
+        a = a[0]
+        a = a['localId']
+
+        print("\t\t\t\tInfo: ", str(a))
+        data = {
+            "work": work,
+            "progress": progress
+        }
 
 
-    database.child("users").child(a).child("reports").child(millis).set(data)
-    name = database.child("users").child(a).child("details").child("name").get().val()
-    return render(request, 'welcome.html', {"e": name})
+        database.child("users").child(a).child("reports").child(millis).set(data, idtoken) #This ,(comma) is important to authenticate the user.
+        name = database.child("users").child(a).child("details").child("name").get(idtoken).val()
+        return render(request, 'welcome.html', {"e": name})
+    except KeyError:
+        message= "Oops! User Logged out Please SignIn Again"
+        return render(request, "signIn.html", {"message": message})

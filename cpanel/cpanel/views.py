@@ -119,3 +119,36 @@ def post_create(request):
     except KeyError:
         message= "Oops! User Logged out Please SignIn Again"
         return render(request, "signIn.html", {"message": message})
+    
+def check(request):
+    import datetime
+
+    idtoken = request.session['uid']
+    a = authentication.get_account_info(idtoken)
+    a = a['users']
+    a = a[0]
+    a = a['localId']
+
+    timestamps = database.child("users").child(a).child("reports").shallow().get().val()
+    print(timestamps)
+
+    lis_time = []
+    for i in timestamps:
+        lis_time.append(i)
+    lis_time.sort(reverse=True)
+    print(lis_time)
+
+    work = []
+    for i in lis_time:
+        wor = database.child("users").child(a).child("reports").child(i).child("work").get().val()
+        work.append(wor)
+
+    print(work)
+    
+    date = [] #For getting a date and time of the work assigned
+    for i in lis_time:
+        dat = datetime.datetime.fromtimestamp(i).strftime("%H:%M")
+
+
+    return render(request, "check.html")
+
